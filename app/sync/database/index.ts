@@ -1,6 +1,6 @@
 import {AsyncStorage} from "react-native";
 import axios from 'react-native-axios';
-import {SQLite} from "expo-sqlite";
+import * as SQLite from 'expo-sqlite';
 import {WebSQLDatabase} from "expo-sqlite/build/SQLite";
 import {API} from "../../config";
 import {Powerline, Project} from "../../entities";

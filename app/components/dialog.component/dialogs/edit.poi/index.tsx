@@ -38,7 +38,7 @@ class EditPoiDialog extends MainModalDialog {
         this.canDisplay = true;
     }
 
-    componentWillMount(): void {
+    UNSAFE_componentWillMount(): void {
         const {id} = this.state;
         this.canDelete = !!id;
         this.canDisplay = !!id;
