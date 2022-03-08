@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Animated, Easing, View } from 'react-native';
+import { Animated, Easing, View, I18nManager } from 'react-native';
 
 const INDETERMINATE_WIDTH_FACTOR = 0.3;
 const BAR_WIDTH_ZERO_POSITION =
@@ -60,31 +60,31 @@ export default class ProgressBar extends Component {
     }
   }
 
-  componentWillReceiveProps(props) {
-    if (props.indeterminate !== this.props.indeterminate) {
-      if (props.indeterminate) {
+  componentDidUpdate(prevProps) {
+    if (prevProps.indeterminate !== this.props.indeterminate) {
+      if (this.props.indeterminate) {
         this.animate();
       } else {
         Animated.spring(this.state.animationValue, {
           toValue: BAR_WIDTH_ZERO_POSITION,
-          useNativeDriver: props.useNativeDriver,
+          useNativeDriver: this.props.useNativeDriver,
         }).start();
       }
     }
     if (
-      props.indeterminate !== this.props.indeterminate ||
-      props.progress !== this.props.progress
+      prevProps.indeterminate !== this.props.indeterminate ||
+      prevProps.progress !== this.props.progress
     ) {
-      const progress = props.indeterminate
+      const progress = this.props.indeterminate
         ? INDETERMINATE_WIDTH_FACTOR
-        : Math.min(Math.max(props.progress, 0), 1);
+        : Math.min(Math.max(this.props.progress, 0), 1);
 
-      if (props.animated) {
+      if (this.props.animated) {
         const { animationType, animationConfig } = this.props;
         Animated[animationType](this.state.progress, {
           ...animationConfig,
           toValue: progress,
-          useNativeDriver: props.useNativeDriver,
+          useNativeDriver: this.props.useNativeDriver,
         }).start();
       } else {
         this.state.progress.setValue(progress);
@@ -152,7 +152,7 @@ export default class ProgressBar extends Component {
         {
           translateX: this.state.progress.interpolate({
             inputRange: [0, 1],
-            outputRange: [innerWidth / -2, 0],
+            outputRange: [innerWidth / (I18nManager.isRTL ? 2 : -2), 0],
           }),
         },
         {

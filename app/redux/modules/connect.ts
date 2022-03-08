@@ -1,4 +1,4 @@
-import {NetInfo} from "react-native";
+import NetInfo from '@react-native-community/netinfo';
 import {eventChannel} from 'redux-saga';
 import {Record} from 'immutable';
 import {call, put, take} from 'redux-saga/effects';
@@ -31,8 +31,8 @@ function* startChannel(syncActionName) {
             listener(isConnected);
         };
 
-        NetInfo.isConnected.addEventListener("connectionChange", handleConnectivityChange);
-        return () => NetInfo.isConnected.removeEventListener("connectionChange", handleConnectivityChange);
+        NetInfo.addEventListener(handleConnectivityChange);
+        return () => NetInfo.useNetInfo() //.addEventListener(handleConnectivityChange);
     });
 
     while (true) {
